@@ -1,0 +1,18 @@
+[Unit]
+Description=llama.cpp server (port 6969) - Qwen3.8-Flash-Next ROCmFP4 dispatcher
+After=graphical-session.target
+Wants=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.config/llama-server/serve.sh
+WorkingDirectory=%h/.config/llama-server
+Restart=on-failure
+RestartSec=5
+
+# Strix Halo unified memory: the 96 GiB GPU carve-out is what makes the 87 GiB
+# model fit VRAM-resident. Lower IOpriority so interactive apps win on CPU.
+IOSchedulingClass=idle
+
+[Install]
+WantedBy=default.target

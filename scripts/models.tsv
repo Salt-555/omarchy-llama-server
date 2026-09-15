@@ -1,0 +1,5 @@
+# The three files the server needs, straight from Hugging Face.
+# repo<TAB>path-in-repo<TAB>sha256<TAB>bytes<TAB>flat name on disk
+agentionai/Qwen3.8-Flash-Next-ROCmFP4-FAST-imatrix-GGUF	Qwen3.8-Flash-Next-ROCmFP4-FAST-v2-ple16.gguf	552a7a162f6a620c3aa0850d070086bc2b95094e0a4e8b860694c7f212cb59d8	93484237760	Qwen3.8-Flash-Next-ROCmFP4-FAST-v2-ple16.gguf
+agentionai/Qwen3.8-Flash-Next-MTP-ROCmFP4-FAST-GGUF	Qwen3.8-Flash-Next-MTP-ROCmFP4-FAST.gguf	5046d69571bb35c699e19c7a00b36633c2fdfdd06d70482551744ec523a6b590	2444519296	Qwen3.8-Flash-Next-MTP-ROCmFP4-FAST.gguf
+agentionai/Qwen3.8-Flash-Next-ROCmFP4-FAST-imatrix-GGUF	mmproj/mmproj-Qwen3.8-Flash-Next-f16.gguf	f456cd796fdbdef0cadb22710b54e0071b6cdf22c07963365baa898267aec517	904004128	mmproj-Qwen3.8-Flash-Next-f16.gguf
