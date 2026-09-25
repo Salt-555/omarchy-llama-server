@@ -7,8 +7,11 @@ Wants=graphical-session.target
 Type=simple
 ExecStart=%h/.config/llama-server/serve.sh
 WorkingDirectory=%h/.config/llama-server
-Restart=on-failure
-RestartSec=5
+Restart=no
+# Restart=no on purpose: a failing model load must not be retried into a
+# crash loop. On a small VRAM carve-out the 87 GiB load thrashes the box and
+# Restart=on-failure turns one bad start into a death spiral at every login.
+# Dead server = visible "offline" in the widget; press Start.
 
 # Strix Halo unified memory: the 96 GiB GPU carve-out is what makes the 87 GiB
 # model fit VRAM-resident. Lower IOpriority so interactive apps win on CPU.

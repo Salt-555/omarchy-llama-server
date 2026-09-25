@@ -47,6 +47,8 @@ options:
   --install-deps      sudo pacman -S --needed the build dependencies
   --force             overwrite existing model.json / presets.json / config.env
   --dry-run           print what would happen, change nothing
+  ALLOW_SMALL_VRAM=1  env: permit install on a <90 GiB carve-out, but the
+                      systemd unit is never enabled (model would crash-loop)
   -h, --help          this text
 EOF
 }
@@ -108,6 +110,18 @@ fi
 
 if [[ "$START" == "1" ]]; then
   step "start the server"
+  # Same guard as preflight, in case preflight was skipped: never enable a unit
+  # that will demand ~88 GiB of VRAM at login on a box that cannot provide it.
+  vram_bytes=0
+  for f in /sys/class/drm/card*/device/mem_info_vram_total; do
+    [[ -r "$f" ]] || continue
+    v="$(cat "$f" 2>/dev/null || echo 0)"
+    (( v > vram_bytes )) && vram_bytes="$v"
+  done
+  vram_gib=$(( vram_bytes / 1073741824 ))
+  if (( vram_gib > 0 && vram_gib < 90 )) && [[ "${ALLOW_SMALL_VRAM:-0}" != "1" ]]; then
+    die "GPU VRAM carve-out is ${vram_gib} GiB but the model needs ~90 GiB. NOT enabling llama-server.service (it would crash-loop at login). Set the UMA carve-out in BIOS, or ALLOW_SMALL_VRAM=1 to override."
+  fi
   if [[ "$DRY_RUN" == "1" ]]; then
     info "[dry-run] would run: systemctl --user enable --now llama-server.service"
   else

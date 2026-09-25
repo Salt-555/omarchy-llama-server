@@ -40,6 +40,14 @@ else
   else
     warn "GPU VRAM carve-out is only ${gib} GiB; the model needs ~90 GiB."
     warn "Set the UMA / dedicated graphics memory to 96 GB in BIOS on this Strix Halo box."
+    # A small carve-out plus 'enable --now' means llama-server demands ~88 GiB of
+    # VRAM at every login and the Restart=on-failure loop can take the desktop
+    # down with it. Refuse instead of bricking the machine.
+    if [[ "${ALLOW_SMALL_VRAM:-0}" == "1" ]]; then
+      warn "ALLOW_SMALL_VRAM=1 set - continuing anyway; do NOT enable llama-server.service on this machine"
+    else
+      FAILED=1
+    fi
   fi
 fi
 ram_gib=$(awk '/^MemTotal:/{printf "%d", $2/1048576}' /proc/meminfo)
